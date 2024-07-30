@@ -22,4 +22,9 @@ class UserController extends Controller
     {
         return $this->userServices->index();
     }
+
+    public function loginUser(Request $request)
+    {
+        return $this->userServices->login($request);
+    }
 }

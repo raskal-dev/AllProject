@@ -4,13 +4,15 @@ namespace App\Services;
 
 use App\Http\Controllers\BaseController;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserServices extends BaseController
 {
 
-    /*
-        parm: void
-        return: Illuminate\Http\JsonResponse
+    /**
+    * parm: void
+    * return: Illuminate\Http\JsonResponse
     */
     public function index()
     {
@@ -36,8 +38,10 @@ class UserServices extends BaseController
         if (!$user) return $this->sendResponse([], 'User not found', 404);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $token = $user->createToken('authToken')->accessToken;
+            $token = $user->createToken('user_token')->accessToken;
             return $this->sendResponse(['token' => $token], 'User Logged In Successfully');
         }
+
+        return $this->sendResponse([], 'Invalid Credentials', 401);
     }
 }
