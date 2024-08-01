@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Passport\TokenRepository;
 
 class UserServices extends BaseController
 {
@@ -43,5 +44,29 @@ class UserServices extends BaseController
         }
 
         return $this->sendResponse([], 'Invalid Credentials', 401);
+    }
+
+    public function logout()
+    {
+        $tokens = Auth::user()->tokens;
+        $tokenRepository = app(TokenRepository::class);
+
+        foreach ($tokens as $token) {
+            $tokenRepository->revokeAccessToken($token->id);
+        }
+
+        return $this->sendResponse([], 'User Logged Out Successfully');
+    }
+
+    public function updateUser(Request $request, $user)
+    {
+        User::find($user)->update($request->all());
+        return $this->sendResponse([], 'User Updated Successfully');
+    }
+
+    public function deleteUser($user)
+    {
+        User::find($user)->delete();
+        return $this->sendResponse([], 'User Deleted Successfully');
     }
 }

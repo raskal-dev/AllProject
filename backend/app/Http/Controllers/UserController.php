@@ -23,8 +23,23 @@ class UserController extends Controller
         return $this->userServices->index();
     }
 
-    public function loginUser(Request $request)
+    public function login(Request $request)
     {
         return $this->userServices->login($request);
+    }
+
+    public function logout()
+    {
+        return $this->userServices->logout();
+    }
+
+    public function updateUser(Request $request, $user)
+    {
+        return $this->userServices->updateUser($request, $user);
+    }
+
+    public function deleteUser($user)
+    {
+        return $this->userServices->deleteUser($user);
     }
 }
